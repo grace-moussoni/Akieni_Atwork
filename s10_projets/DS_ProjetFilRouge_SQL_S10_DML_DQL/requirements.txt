@@ -1,0 +1,16 @@
+# --- Interface Graphique ---
+customtkinter>=5.2.2
+pillow>=10.3.0
+
+# --- Base de données SQL Server ---
+pyodbc>=5.1.0
+sqlalchemy>=2.0.30
+
+# --- Manipulation de données / CSV ---
+pandas>=2.2.2
+
+# --- Gestion des variables d'environnement ---
+python-dotenv>=1.0.1
+
+# --- Tests & Qualité de code ---
+pytest>=8.2.1
