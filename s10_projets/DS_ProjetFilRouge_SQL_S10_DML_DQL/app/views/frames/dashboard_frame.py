@@ -1,6 +1,7 @@
 import os
 import customtkinter as ctk
 from app.views.modals.add_customer_modal import AddCustomerModal
+from app.views.modals.analytics_modal import AnalyticsModal
 
 class DashboardFrame(ctk.CTkFrame):
     def __init__(self, master, controller):
@@ -73,45 +74,114 @@ class DashboardFrame(ctk.CTkFrame):
         )
         title.pack(anchor="w", padx=20, pady=(15, 10))
 
-        # Conteneur pour aligner les boutons horizontalement
+        # Conteneur pour aligner les boutons sous forme de grille
         btn_box = ctk.CTkFrame(self.action_frame, fg_color="transparent")
         btn_box.pack(anchor="w", padx=20, pady=10)
 
-        # Bouton 1 : Import CSV
+        # Variables communes pour alléger le code
+        btn_font = ctk.CTkFont(weight="bold")
+        btn_height = 38
+
+        # ================= LIGNE 0 (En haut) =================
+
+        # Bouton 1 : Import CSV (Ligne 0, Colonne 0)
         btn_import = ctk.CTkButton(
             btn_box,
             text="📁 Importer un CSV",
             command=self._on_import_click,
-            height=38,
-            font=ctk.CTkFont(weight="bold"),
+            height=btn_height,
+            font=btn_font,
             fg_color="#1f538d",
             hover_color="#14375e"
         )
-        btn_import.pack(side="left", padx=(0, 10))
+        btn_import.grid(row=0, column=0, padx=(0, 10), pady=(0, 10))
 
-        # Bouton 2 : Ajouter un Client (Popup)
+        # Bouton 2 : Ajouter un Client (Ligne 0, Colonne 1)
         btn_add_customer = ctk.CTkButton(
             btn_box,
             text="➕ Nouveau Client",
             command=self._open_add_customer_modal,
-            height=38,
-            font=ctk.CTkFont(weight="bold"),
+            height=btn_height,
+            font=btn_font,
             fg_color="#15803d",
             hover_color="#166534"
         )
-        btn_add_customer.pack(side="left", padx=10)
+        btn_add_customer.grid(row=0, column=1, padx=10, pady=(0, 10))
 
-        # Bouton 3 : Audit Commandes Annulées (Finance)
+        # Bouton 3 : Audit Commandes Annulées (Ligne 0, Colonne 2)
         btn_flag_canceled = ctk.CTkButton(
             btn_box,
             text="🚩 Marquer Annulations",
             command=self._on_flag_canceled_click,
-            height=38,
-            font=ctk.CTkFont(weight="bold"),
+            height=btn_height,
+            font=btn_font,
             fg_color="#b91c1c",
             hover_color="#991b1b"
         )
-        btn_flag_canceled.pack(side="left", padx=10)
+        btn_flag_canceled.grid(row=0, column=2, padx=10, pady=(0, 10))
+
+        # Bouton 4 : Correction Bug Mars 2018 (Ligne 0, Colonne 3)
+        btn_fix_orders = ctk.CTkButton(
+            btn_box,
+            text="🔧 Corriger Bug Mars 2018",
+            command=lambda: self.controller.handle_fix_march_orders(self),
+            height=btn_height,
+            font=btn_font,
+            fg_color="#d97706",
+            hover_color="#b45309"
+        )
+        btn_fix_orders.grid(row=0, column=3, padx=10, pady=(0, 10))
+
+        # ================= LIGNE 1 (En bas) =================
+
+        # Bouton 5 : Désactiver Produits Inactifs (Ligne 1, Colonne 0)
+        btn_deactivate_products = ctk.CTkButton(
+            btn_box,
+            text="🚫 Nettoyer Catalogue Produits",
+            command=lambda: self.controller.handle_deactivate_products(self),
+            height=btn_height,
+            font=btn_font,
+            fg_color="#475569",
+            hover_color="#334155"
+        )
+        # Note : padx=(0, 10) sur la colonne 0 permet d'aligner le bord gauche avec le titre
+        btn_deactivate_products.grid(row=1, column=0, padx=(0, 10), pady=(10, 0))
+
+        # Bouton 6 : Suppression Clients Test (Ligne 1, Colonne 1)
+        btn_del_cust = ctk.CTkButton(
+            btn_box,
+            text="🗑️ Supprimer Clients Test",
+            command=lambda: self.controller.trigger_delete_mock_customers(self),
+            height=btn_height,
+            font=btn_font,
+            fg_color="#991b1b",
+            hover_color="#7f1d1d"
+        )
+        btn_del_cust.grid(row=1, column=1, padx=10, pady=(10, 0))
+
+        # Bouton 7 : Nettoyage Avis Vides (Ligne 1, Colonne 2)
+        btn_del_reviews = ctk.CTkButton(
+            btn_box,
+            text="🗑️ Nettoyer Avis 5★ Vides",
+            command=lambda: self.controller.trigger_delete_uninformative_reviews(self),
+            height=btn_height,
+            font=btn_font,
+            fg_color="#b91c1c",
+            hover_color="#991b1b"
+        )
+        btn_del_reviews.grid(row=1, column=2, padx=10, pady=(10, 0))
+
+        # Bouton 8 : Explorateur Pandas (Ligne 1, Colonne 3)
+        btn_analytics = ctk.CTkButton(
+            btn_box,
+            text="📈 Explorateur Pandas",
+            command=lambda: AnalyticsModal(self),
+            height=btn_height,
+            font=btn_font,
+            fg_color="#6366f1",
+            hover_color="#4f46e5"
+        )
+        btn_analytics.grid(row=1, column=3, padx=10, pady=(10, 0))
 
         # Label de statut pour informer l'utilisateur
         self.status_label = ctk.CTkLabel(

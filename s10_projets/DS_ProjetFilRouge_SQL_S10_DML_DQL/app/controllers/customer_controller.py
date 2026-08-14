@@ -43,3 +43,13 @@ class CustomerController:
 
         except Exception as e:
             return False, f"Erreur lors de la création du client : {str(e)}"
+
+    def get_mock_customers_count(self) -> int:
+        return self.service.count_mock_customers()
+
+    def handle_delete_mock_customers(self) -> tuple[bool, str]:
+        try:
+            result = self.service.delete_mock_customers()
+            return True, result["message"]
+        except Exception as e:
+            return False, f"Erreur lors de la suppression : {str(e)}"

@@ -57,3 +57,22 @@ class CustomerService:
             "customer_unique_id": final_uniq_id,
             "message": f"Client créé avec succès (ID: {final_id[:8]}...)"
         }
+
+    def count_mock_customers(self) -> int:
+        """Compte le nombre de clients test à supprimer."""
+        query = text("SELECT COUNT(*) FROM customers WHERE customer_id LIKE 'cust_test_%'")
+        with self.engine.connect() as connection:
+            return connection.execute(query).scalar() or 0
+
+    def delete_mock_customers(self) -> dict:
+        """Supprime les clients test."""
+        query = text("DELETE FROM customers WHERE customer_id LIKE 'cust_test_%'")
+        with self.engine.begin() as connection:
+            result = connection.execute(query)
+            rows_affected = result.rowcount
+
+        return {
+            "success": True,
+            "rows_affected": rows_affected,
+            "message": f"{rows_affected} client(s) fictif(s) supprimé(s) avec succès."
+        }
